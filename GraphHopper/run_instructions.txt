@@ -1,0 +1,14 @@
+In order to run a specific instance of GraphHopper, please change to the corresponding subdirectory and from within the subdirectory run:
+
+java -jar ../../graphhopper-web-10.2.jar server config.yml
+
+Adjust to specific version of graphhopper that you want to use and adjust config.yml for each instance in its own directory. config-example.yml can be used as a guide.
+
+Exemplary directory structure:
+GraphHopper
+--Kanto
+----Pedestrian
+------config.yml
+------kanto.osm.pbf
+--config-example.yml
+--run_instructions.txt
