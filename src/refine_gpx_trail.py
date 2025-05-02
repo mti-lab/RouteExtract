@@ -8,6 +8,7 @@ import requests
 import matplotlib.pyplot as plt
 import random
 import math
+from scipy.spatial import KDTree
 
 def load_coordinates_from_csv(file_path):
     coordinates = []
@@ -53,8 +54,7 @@ def get_route_as_gpx(stops):
         print(f"Error: Unable to fetch route. Status code: {response.status_code}")
         print(f"Response content: {response.text}")
 
-
-def evaluate_gpx(gpx_data):
+def convert_gpx_to_pixel_coordinates(gpx_data):
     # Extract all points
     gpx_points = []
     for track in gpx_data.tracks:
@@ -68,6 +68,39 @@ def evaluate_gpx(gpx_data):
 
     # Remember: row is y, col is x
     pixel_coords = [(col, row) for row, col in pixel_coords]
+    return pixel_coords
+
+def evaluate_from_mask(gpx_data, sampling_rate=1.0):
+    pixel_coords = convert_gpx_to_pixel_coordinates(gpx_data)
+
+    # Build KD-tree for fast nearest neighbor lookup
+    tree = KDTree(pixel_coords)
+
+    # Get all trail pixels
+    trail_yx = np.argwhere(trail_mask == 1)  # (row, col)
+    trail_pixels = np.array([(x, y) for y, x in trail_yx])  # shape (M, 2)
+
+    # Query nearest GPX point for each trail pixel
+    distances, indices = tree.query(trail_pixels)
+    max_idx = np.argmax(distances)
+
+    # Extract worst-matching trail pixel and its nearest GPX point
+    x_trail, y_trail = trail_pixels[max_idx]
+    x_gpx, y_gpx = pixel_coords[indices[max_idx]]
+
+    # Convert both to geo-coordinates
+    lon_trail, lat_trail = xy(transform, y_trail, x_trail)
+    lon_gpx, lat_gpx = xy(transform, y_gpx, x_gpx)
+    print(f"Trail pixel with largest distance from GPX: pixel ({x_trail}, {y_trail})")
+    print(f"Nearest GPX pixel: ({x_gpx}, {y_gpx})")
+    print(f"Pixel distance: {distances[max_idx]:.2f}")
+    print("\nGround Truth Trail Point (Geo):", (lat_trail, lon_trail))
+    print("Nearest GPX Point (Geo):", (lat_gpx, lon_gpx))
+    return (float(lat_trail), float(lon_trail))
+
+
+def evaluate_from_gpx(gpx_data, top_n=20):
+    pixel_coords = convert_gpx_to_pixel_coordinates(gpx_data)
 
     # Compare GPX Mask with Segmented Trail
     gpx_mask = np.zeros_like(trail_mask)
@@ -92,16 +125,15 @@ def evaluate_gpx(gpx_data):
     pixel_coords = np.array(pixel_coords)
 
     # Threshold or select top N mismatches
-    top_n = 20
     top_indices = np.argsort(-distances)[:top_n]  # Largest distances first
 
     # Visualization
     plt.figure(figsize=(12, 5))
-    plt.imshow(map_img)
+    plt.imshow(map_img[..., ::-1])
     plt.axis('off')
 
     # Plot all GPX points (small dots)
-    plt.scatter(pixel_coords[:, 0], pixel_coords[:, 1], c='cyan', s=5, label='GPX Trail')
+    plt.scatter(pixel_coords[:, 0], pixel_coords[:, 1], c='green', s=15, label='GPX Trail')
 
     # Plot top N farthest points (larger red markers)
     plt.scatter(pixel_coords[top_indices, 0], pixel_coords[top_indices, 1],
@@ -178,19 +210,21 @@ def insert_point_min_distance(points, new_point):
 
 ### One-time setup: Load georeferenced image, regular image, trail mask
 # Open the files
-map_georeferenced = rasterio.open('../kobo-mask_georeferenced.tif')
-map_img = cv2.imread('../test-data/kobo.jpg')
-trail_mask = cv2.imread('../test-data/kobo-mask.png', cv2.IMREAD_GRAYSCALE)
+map_georeferenced = rasterio.open('../test-data/minami-senju_georeferenced.tif')
+map_img = cv2.imread('../test-data/minami-senju.jpg')
+trail_mask = cv2.imread('../test-data/minami-senju-mask.png', cv2.IMREAD_GRAYSCALE)
 trail_mask = (trail_mask == 0).astype(np.uint8)
-csv_file_path = '../test-data/kobo-coordinates.csv'
-no_iterations = 10  # Number of iterations of refining the map (currently still set manually and not based on metrics)
-top_n = 20  # Number of selected farthest points for finding new points of the route
+csv_file_path = '../test-data/minami-senju-coordinates.csv'
+no_iterations = 100  # Number of iterations of refining the map (currently still set manually and not based on metrics)
+top_n = 1  # Number of selected farthest points for finding new points of the route
 
 # Get the Affine transform (maps pixel coords <-> world coords)
 transform = map_georeferenced.transform
 stops = load_coordinates_from_csv(csv_file_path)
+stops.append(stops[0])
 
 for _ in range(no_iterations):
     gpx = gpxpy.parse(get_route_as_gpx(stops))
-    new_stop = evaluate_gpx(gpx)
+    #new_stop = evaluate_from_gpx(gpx, top_n=top_n)
+    new_stop = evaluate_from_mask(gpx)
     insert_point_min_distance(stops, new_stop)
