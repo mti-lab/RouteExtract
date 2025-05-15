@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 import random
 import math
 from scipy.spatial import KDTree
+from mask_to_graph import generate_path, extract_graph_with_cycles, bfs_no_revisiting
+from skimage.morphology import skeletonize
 
 def load_coordinates_from_csv(file_path):
     coordinates = []
@@ -20,7 +22,7 @@ def load_coordinates_from_csv(file_path):
             coordinates.append((lat, lon))
     return coordinates
 
-def get_route_as_gpx(stops):
+def get_route_as_gpx(stops, route_filename='route.gpx'):
     # URL of GraphHopper instance
     graphhopper_url = "http://localhost:8989/route"
 
@@ -45,9 +47,9 @@ def get_route_as_gpx(stops):
     # Check if the response was successful
     if response.status_code == 200:
         # Save the GPX file to disk
-        with open('../route.gpx', 'wb') as f:
+        with open(f'../outputs/{route_filename}', 'wb') as f:
             f.write(response.content)
-        print("GPX file saved as 'route.gpx'.")
+        print(f"GPX file saved as '{route_filename}'.")
         return response.content
     else:
         # Log the response for debugging
@@ -77,7 +79,7 @@ def evaluate_from_mask(gpx_data, sampling_rate=1.0):
     tree = KDTree(pixel_coords)
 
     # Get all trail pixels
-    trail_yx = np.argwhere(trail_mask == 1)  # (row, col)
+    trail_yx = np.argwhere(skeleton == 1)  # (row, col)
     trail_pixels = np.array([(x, y) for y, x in trail_yx])  # shape (M, 2)
 
     # Query nearest GPX point for each trail pixel
@@ -96,7 +98,7 @@ def evaluate_from_mask(gpx_data, sampling_rate=1.0):
     print(f"Pixel distance: {distances[max_idx]:.2f}")
     print("\nGround Truth Trail Point (Geo):", (lat_trail, lon_trail))
     print("Nearest GPX Point (Geo):", (lat_gpx, lon_gpx))
-    return (float(lat_trail), float(lon_trail))
+    return (float(lat_trail), float(lon_trail), int(x_trail), int(y_trail))
 
 
 def evaluate_from_gpx(gpx_data, top_n=20):
@@ -207,24 +209,118 @@ def insert_point_min_distance(points, new_point):
     return points
 
 
+def find_nearest_point(point, point_list):
+    """Find nearest point in point_list to the given point."""
+    tree = KDTree(point_list)
+    dist, idx = tree.query(point)
+    return point_list[idx]
+
+
+def find_connection_nodes(graph, start, known_points, max_steps=1000):
+    """Walk from 'start' in both directions until we find two known points."""
+    visited = set()
+    frontier = [(start, [])]
+    found_points = []
+
+    while frontier and len(found_points) < 2:
+        current, path = frontier.pop(0)
+        if current in visited:
+            continue
+        visited.add(current)
+
+        # If we find a known point, save it
+        if current in known_points:
+            found_points.append(current)
+
+        for neighbor in graph.neighbors(current):
+            if neighbor not in visited and len(path) < max_steps:
+                frontier.append((neighbor, path + [current]))
+
+    if len(found_points) == 2:
+        return found_points
+    else:
+        return None  # Didn't find both points
+
+
+def insert_point_by_connectivity(graph, known_image_points, c_image_point):
+    # Map known points for quick lookup
+    known_set = set(map(tuple, known_image_points))
+
+    # Walk from the projected point in both directions to find two known points
+    connection_points = find_connection_nodes(graph, tuple(c_image_point), known_set, max_steps=5000)
+
+    if connection_points:
+        hit1, hit2 = connection_points
+        idx1 = known_image_points.index(hit1)
+        idx2 = known_image_points.index(hit2)
+
+        # Insert c between hit1 and hit2
+        insert_idx = min(idx1, idx2) + 1
+        return insert_idx
+    else:
+        return None  # Couldn't find both ends
+
+
+def linear_sample_with_edges(data, fraction):
+    n = len(data)
+    if n < 2:
+        return data[:]  # Too short to sample meaningfully
+
+    sample_size = max(2, int(n * fraction))
+
+    # Generate linearly spaced indices from 0 to n-1
+    indices = np.linspace(0, n - 1, num=sample_size, dtype=int)
+    return [data[i] for i in indices]
+
+
 
 ### One-time setup: Load georeferenced image, regular image, trail mask
 # Open the files
-map_georeferenced = rasterio.open('../test-data/minami-senju_georeferenced.tif')
-map_img = cv2.imread('../test-data/minami-senju.jpg')
-trail_mask = cv2.imread('../test-data/minami-senju-mask.png', cv2.IMREAD_GRAYSCALE)
+map_georeferenced = rasterio.open('../Data/Minami_Senju/scan-georeferenced.tif')
+map_img = cv2.imread('../Data/Minami_Senju/scan.jpg')
+trail_mask = cv2.imread('../Data/Minami_Senju/scan-mask.png', cv2.IMREAD_GRAYSCALE)
 trail_mask = (trail_mask == 0).astype(np.uint8)
-csv_file_path = '../test-data/minami-senju-coordinates.csv'
-no_iterations = 100  # Number of iterations of refining the map (currently still set manually and not based on metrics)
-top_n = 1  # Number of selected farthest points for finding new points of the route
+skeleton = skeletonize(trail_mask > 0)
+csv_file_path = '../Data/Minami_Senju/scan-coordinates.csv'
+gpx_filename = 'route.gpx'
+no_iterations = 10  # Number of iterations of refining the map (currently still set manually and not based on metrics)
+top_n = 20  # Number of selected farthest points for finding new points of the route
+
+G = extract_graph_with_cycles(trail_mask)
 
 # Get the Affine transform (maps pixel coords <-> world coords)
 transform = map_georeferenced.transform
-stops = load_coordinates_from_csv(csv_file_path)
-stops.append(stops[0])
+start_and_end = load_coordinates_from_csv(csv_file_path)
+start_and_end = [~transform * (lon, lat) for (lat, lon) in start_and_end]
+start_and_end = [(y, x) for (x, y) in start_and_end]
+path_edges = generate_path(trail_mask, start=start_and_end[0], end=start_and_end[1])
+
+visited_nodes = set()
+visited_edges = set()
+edge_trails = dict()
+for edge in path_edges:
+    if edge in visited_edges:
+        continue
+
+    edge_trail, visited_nodes = bfs_no_revisiting(G, start=edge[0], end=edge[1], visited=visited_nodes)
+    if edge_trail:
+        edge_trail = linear_sample_with_edges(edge_trail, 0.005)
+        edge_trails[edge] = edge_trail
+        edge_trails[(edge[1], edge[0])] = list(reversed(edge_trail))
+        visited_edges.add(edge)
+        visited_edges.add((edge[1], edge[0]))
+
+stops_pixel_coords = []
+for edge in path_edges:
+    edge_trail = edge_trails.get(edge)
+    if edge_trail:
+        stops_pixel_coords = stops_pixel_coords + edge_trails[edge]
+    else:
+        stops_pixel_coords = stops_pixel_coords + [edge[0], edge[1]]
+stops_lat_lon = [xy(transform, x, y) for x, y in stops_pixel_coords]
+stops_lat_lon = [(lat, lon) for (lon, lat) in stops_lat_lon]
 
 for _ in range(no_iterations):
-    gpx = gpxpy.parse(get_route_as_gpx(stops))
-    #new_stop = evaluate_from_gpx(gpx, top_n=top_n)
-    new_stop = evaluate_from_mask(gpx)
-    insert_point_min_distance(stops, new_stop)
+    gpx = gpxpy.parse(get_route_as_gpx(stops_lat_lon, gpx_filename))
+    lat, lon, x, y = evaluate_from_mask(gpx)
+    insert_point_min_distance(stops_lat_lon, (lat, lon))
