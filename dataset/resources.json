@@ -1,0 +1,122 @@
+{
+  "map001": {
+    "url": "https://www.city.arakawa.tokyo.jp/documents/3819/2019-minami-english.pdf",
+    "sha256": "f1b269876035ca21df148537ccca2c9dc0341652b0aa22b9f0f0616c8e1dfc75"
+  },
+  "map002": {
+    "url": "https://www.city.hadano.kanagawa.jp/www/contents/1622768264518/simple/B.pdf",
+    "sha256": "be9d1f6440a1774d5e9152023e0dd33ee1a33ed24cc4dca10d69964632de189b"
+  },
+  "map003": {
+    "url": "https://www.town.okutama.tokyo.jp/material/files/group/8/0507guidmap_jp.pdf",
+    "sha256": "d1c16423dd5292ad54cc6317432cb3307d462abadad880edea451c77a60d5ab1"
+  },
+  "map004": {
+    "url": "https://www.town.okutama.tokyo.jp/material/files/group/8/0507therapy_jp.pdf",
+    "sha256": "a11c73e308f1011a38e7dc79b8f23bdf48e91d265ca5c31ce8b6678c8c7c2d21"
+  },
+  "map005": {
+    "url": "https://t-navi.city.taito.lg.jp/storage/pamphlet_pdf/20250314173835_nipporiyanaka_2503_jp.pdf",
+    "sha256": "c065cdb5e8b4cc0604521ce11074371edb878baee9a909e3f78f3f8f3b62a422"
+  },
+  "map006": {
+    "url": "https://visit-chiyoda.tokyo/guide_map/uniq/images/mitte_chiyoda_en.pdf",
+    "sha256": "ce861acd967e0b8e6ddec5badac960b17400672ecf8c304810a8db26495b8651"
+  },
+  "map007":{
+    "url": "https://t-navi.city.taito.lg.jp/storage/pamphlet_pdf/20250321085129_yanaka_shichifukujin_2503.pdf",
+    "sha256": "72ce73295d217d9a29ace25e462f2c330d2f1fc32098ae628f20276ecd92b531"
+  },
+  "map008": {
+    "url": "https://t-navi.city.taito.lg.jp/storage/pamphlet_pdf/20250321085048_asakusanadokoro_shichifukujin_2503.pdf",
+    "sha256": "db37722e4717d8de3696c95431790369fcb964b63e0d721beb6f0c3fb9d936f4"
+  },
+  "map009": {
+    "url": "https://t-navi.city.taito.lg.jp/storage/pamphlet_pdf/20250321085114_shitaya_shichifukujin_2503.pdf",
+    "sha256": "7e10983904af82394f4d0cf472bdc9c6d4e11a88722ca72366efbf20f8307b08"
+  },
+  "map010": {
+    "url": "https://www.gotokyo.org/book/wp-content/uploads/2021/09/2109_kururin-chiyoda_low_EN.pdf",
+    "sha256": "fcd84fb7c984a601d3d1ff8438efbdc8c8d31de19cdf7c0bee8c15c2a570f959"
+  },
+  "map011": {
+    "url": "https://www.gotokyo.org/book/actibook/AO_2503_nishiogikubo-sanpo_EN/original.pdf",
+    "sha256": "72a44bf6d84c452cd6190596337a5143691ac5e84f11892b43154890a9ed78c3"
+  },
+  "map012": {
+    "url": "https://www.city.higashimurayama.tokyo.jp/tanoshimi/kanko/kankopamph/files/cocomite_en.pdf",
+    "sha256": "fef95ea677efeaac503c5dd41baf4818a0d65a684d0ffb5ed16e61d4c501edaa"
+  },
+  "map013": {
+    "url": "https://www.city.hadano.kanagawa.jp/www/contents/1622768264518/simple/AE.pdf",
+    "sha256": "7c51e71e12e637a188250b65ddc702dcdea8d01fdb66c92340e9a57821428182"
+  },
+  "map014": {
+    "url": "https://www.city.hadano.kanagawa.jp/www/contents/1622768264518/simple/CDF.pdf",
+    "sha256": "f9ee8fc523909fab7dd5510252c0662a1e04dd0aa616b9525269f3d2ea810c23"
+  },
+  "map015": {
+    "url": "https://www.city.higashimurayama.tokyo.jp/tanoshimi/kanko/kankopamph/files/cocomite_JP.pdf",
+    "sha256": "f12c55f4de39949f1b5c887e31ed7d05d482f45d71a41e325b4e5019ad501079"
+  },
+  "map016": {
+    "url": "https://www.kanagawa-kankou.or.jp/storage/pamphlet_pdf/20240203132600_jogashimamisakiodekake.pdf",
+    "sha256": "f538777c132c0a9198f786f9cf5d04a68a2af7fb6c0d04812a2041d20abc12ee"
+  },
+  "map017": {
+    "url": "https://oki-park.jp/userfiles/files/shurijo/shurijo_pam_en_2404.pdf",
+    "sha256": "a45e83f1b969d7ba6f4e5697aba53694296c9ca1e6968bfce38b52108f8b64c3"
+  },
+  "map018": {
+    "url": "https://www.hkc.or.jp/pamphlet/pdf/ikouyo/ikouyo-hachiouji.pdf",
+    "sha256": "dd145cb737b8fedbd1c8d01d1bc710ff6deb766cda57ec8b11de3874c6e841e5"
+  },
+  "map019": {
+    "url": "https://partners-pamph.jnto.go.jp/simg/pamph/1461.pdf",
+    "sha256": "81a05a8848b615c9dc92b23ed9a4cae32ed6f4a567fff2bfdc5432e166e0f6df"
+  },
+  "map020": {
+    "url": "https://www.fujikyubus.co.jp/pdf/hikingbus/hikingbus.pdf",
+    "sha256": "4d0512aad8a638596ba44a9635d0e68b06b5da0107038e3e99af132bf877964c"
+  },
+  "map021": {
+    "url": "https://visit-chiyoda.tokyo/app/upload/pdf/e9780e1fa72bcd598050f4d71e9b7f37.pdf",
+    "sha256": "995c1ce2575d9fa3afed54e2ff85cbfc942de018793305602b432a3b6b8daaa7"
+  },
+  "map022": {
+    "url": "https://visit-chiyoda.tokyo/app/upload/pdf/f69a2876e2d45b7b8387e5a8424a1c11.pdf",
+    "sha256": "46f7e5651be9d7880f164ffb454b0a3dc5fa880d5a160be1c0697f8e9a440aad"
+  },
+  "map023": {
+    "url": "https://visit-chiyoda.tokyo/app/upload/files/history03map.pdf",
+    "sha256": "1a526760bd25087961341c341b14f2fc78ff61d36e57eaff459a5fa2512b7e00"
+  },
+  "map024": {
+    "url": "https://visit-chiyoda.tokyo/app/upload/files/%E5%9C%B0%E5%9B%B3%E9%9D%A2%E5%B0%8F.pdf",
+    "sha256": "f531ba9c15a47ffb52f353742d8426575d1b3efea127c812a711defc844c9070"
+  },
+  "map025": {
+    "url": "https://miura-info.ne.jp/wp-content/uploads/2023/08/%E3%81%8D%E3%81%BE%E3%81%BE%E3%81%AB%E6%95%A3%E6%AD%A912_%E4%B8%89%E5%B4%8E%E5%8F%A3%E9%A7%85.pdf",
+    "sha256": "ca66cb8046976b40c19b31915be695e27d14050175d5be5d9733ce458a542ac3"
+  },
+  "map026": {
+    "url": "https://miura-info.ne.jp/wp-content/uploads/2023/08/%E3%81%8D%E3%81%BE%E3%81%BE%E3%81%AB%E6%95%A3%E6%AD%A911_%E4%B8%89%E6%B5%A6%E6%B5%B7%E5%B2%B8%E9%A7%85.pdf",
+    "sha256": "93bdf3336cdb98cf2e7ffa8dfa81782b160206b8af90703d8945b2b0759e7b4c"
+  },
+  "map027": {
+    "url": "https://ttca.jp/ttca21/wp-content/uploads/2023/02/TSUKUBA_A4_map_moji.pdf",
+    "sha256": "e2f86d26e7026ade0f04d402f3dfe637fd4ce3cca9fde3be3095450f77e807ba"
+  },
+  "map028": {
+    "url": "https://www.gotokyo.org/book/actibook/AO_2503_sanpo-ueno_JP/original.pdf",
+    "sha256": "284a8acc8ccefd31eb96b44eec8f2f0a348d7eb777ba57c2051764837280f29f"
+  },
+  "map029": {
+    "url": "https://www.gotokyo.org/book/actibook/AO_2503_sanpo-asakusa_JP/original.pdf",
+    "sha256": "9f92ca53a4f2e058c3b7086454d3609c8c141c4421b33fb26cc3ef5ee759b263"
+  },
+  "map030": {
+    "url": "https://www.gotokyo.org/book/actibook/AO2_2504_bunkyo_EN/original.pdf",
+    "sha256": "271c4ef98e7fe21b90a40e063f9768362bbb88364c6d3506dacc81aeea7fe494"
+  }
+}
