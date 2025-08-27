@@ -1,0 +1,16 @@
+albumentations
+gpxpy
+matplotlib
+networkx
+numpy
+pdf2image
+pyproj
+rasterio
+requests
+ruamel.yaml
+scikit-image
+scipy
+segmentation_models_pytorch
+tensorboard
+torch==2.7.0
+tqdm
