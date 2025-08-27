@@ -4,7 +4,8 @@
 ## Setup
 
 ### Requirements
-For the required python packages, simply install them from the provided `requirements.txt` file with pip or uv.
+For the required python packages, simply install them from the provided `requirements.txt` file with pip or uv. Our own
+environment is a conda environment with python 3.12.11, but other environments and python versions may work, too.
 ```shell
 pip install uv && \
 uv pip install -r requirements.txt
@@ -39,6 +40,9 @@ cp ../../config-example.yml config.yml;
 cd ../../../
 ```
 
+When running GraphHopper for the first time with a specific configuration and OSM file, it will take some minutes to set
+everything up. Consequent startups will be much faster!
+
 ### Map Dataset
 We provide the scripts to generate our map dataset within this directory. The dataset contains 50 hiking and sightseeing
 maps from around Japan. Each map has manually created masks for every trail in a map. We also provide Ground Control Points
@@ -57,6 +61,8 @@ cd ../
 
 ## How to run
 ### Trail Segmentation
+Before training the segmentation model, you first need to run `src/trail_dataset.py` once to generate the `split.txt` file
+which assigns each map and trail to train, val, or test split.
 To train the segmentation, run `src/train_trail_segmentation.py`. The model can be evaluated with `src/evaluate_trail_segmentation.py`.
 
 ### Route Generation

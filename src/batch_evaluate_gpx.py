@@ -11,6 +11,7 @@ OUTPUT_ROOT = Path("../outputs")
 MASK_DIR = Path("../dataset/masks")  # Ground truth masks
 MANIFEST_PATH = Path("../dataset/maps_manifest.yaml")
 OUTPUT_CSV = Path("../outputs/evaluation_all_configs.csv")
+PIPELINE_CONFIG = "gpx_e2e_gp_ir_pred"
 
 # Transformer
 transformer = Transformer.from_crs("EPSG:4326", CRS_TARGET, always_xy=True)
@@ -68,7 +69,7 @@ def merge_results_to_csv(results, output_csv):
 
 results = []
 
-for gpx_dir in sorted(OUTPUT_ROOT.glob("gpx_e2e_gp_ir_pred")):
+for gpx_dir in sorted(OUTPUT_ROOT.glob(PIPELINE_CONFIG)):
     label_suffix = gpx_dir.name[4:]  # Strip "gpx_" prefix
     print(f"\n[==] Evaluating config: {label_suffix}")
 

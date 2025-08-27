@@ -98,14 +98,15 @@ def visualize_debug(gpx_pts, mask_pts, chamfer_dist_m):
     plt.show()
 
 # MAIN
-transformer_ll_to_utm = Transformer.from_crs("EPSG:4326", CRS_TARGET, always_xy=True)
+if __name__ == "__main__":
+    transformer_ll_to_utm = Transformer.from_crs("EPSG:4326", CRS_TARGET, always_xy=True)
 
-gpx_pts   = load_gpx_to_utm(GPX_PATH, transformer_ll_to_utm)
-mask_pts  = load_mask_to_utm(MASK_PATH, MANIFEST_PATH, MAP_ID)
+    gpx_pts   = load_gpx_to_utm(GPX_PATH, transformer_ll_to_utm)
+    mask_pts  = load_mask_to_utm(MASK_PATH, MANIFEST_PATH, MAP_ID)
 
-chamfer_m = chamfer_distance(gpx_pts, mask_pts)
-print(f"Chamfer distance: {chamfer_m:.2f} m")
+    chamfer_m = chamfer_distance(gpx_pts, mask_pts)
+    print(f"Chamfer distance: {chamfer_m:.2f} m")
 
-if SHOW_PLOT:
-    visualize_debug(gpx_pts, mask_pts, chamfer_m)
+    if SHOW_PLOT:
+        visualize_debug(gpx_pts, mask_pts, chamfer_m)
 
