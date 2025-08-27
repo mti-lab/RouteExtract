@@ -33,7 +33,7 @@ Example on how to get OSM data:
 ```shell
 mkdir GraphHopper/Kanto; \
 mkdir GraphHopper/Kanto/Pedestrian; \
-cd GraphHopper/Kantoo/Pedestrian && \
+cd GraphHopper/Kanto/Pedestrian && \
 wget 'https://download.openstreetmap.fr/extracts/asia/japan/kanto.osm.pbf'; \
 cp ../../config-example.yml config.yml;
 cd ../../../
