@@ -4,7 +4,7 @@
     "sha256": "f1b269876035ca21df148537ccca2c9dc0341652b0aa22b9f0f0616c8e1dfc75"
   },
   "map002": {
-    "url": "https://www.city.hadano.kanagawa.jp/www/contents/1622768264518/simple/B.pdf",
+    "url": "https://www.city.hadano.kanagawa.jp/material/files/group/51/B.pdf",
     "sha256": "be9d1f6440a1774d5e9152023e0dd33ee1a33ed24cc4dca10d69964632de189b"
   },
   "map003": {
@@ -23,7 +23,7 @@
     "url": "https://visit-chiyoda.tokyo/guide_map/uniq/images/mitte_chiyoda_en.pdf",
     "sha256": "ce861acd967e0b8e6ddec5badac960b17400672ecf8c304810a8db26495b8651"
   },
-  "map007":{
+  "map007": {
     "url": "https://t-navi.city.taito.lg.jp/storage/pamphlet_pdf/20250321085129_yanaka_shichifukujin_2503.pdf",
     "sha256": "72ce73295d217d9a29ace25e462f2c330d2f1fc32098ae628f20276ecd92b531"
   },
@@ -44,20 +44,20 @@
     "sha256": "72a44bf6d84c452cd6190596337a5143691ac5e84f11892b43154890a9ed78c3"
   },
   "map012": {
-    "url": "https://www.city.higashimurayama.tokyo.jp/tanoshimi/kanko/kankopamph/files/cocomite_en.pdf",
-    "sha256": "fef95ea677efeaac503c5dd41baf4818a0d65a684d0ffb5ed16e61d4c501edaa"
+    "url": "https://www.city.higashimurayama.tokyo.jp/tanoshimi/kanko/kankopamph/files/cocomite_eng2026.pdf",
+    "sha256": "9cf60d5ea902f073b22f296f791daf929dc76d6bb51f73d089c1cb2615758ddb"
   },
   "map013": {
-    "url": "https://www.city.hadano.kanagawa.jp/www/contents/1622768264518/simple/AE.pdf",
+    "url": "https://www.city.hadano.kanagawa.jp/material/files/group/51/AE.pdf",
     "sha256": "7c51e71e12e637a188250b65ddc702dcdea8d01fdb66c92340e9a57821428182"
   },
   "map014": {
-    "url": "https://www.city.hadano.kanagawa.jp/www/contents/1622768264518/simple/CDF.pdf",
+    "url": "https://www.city.hadano.kanagawa.jp/material/files/group/51/CDF.pdf",
     "sha256": "f9ee8fc523909fab7dd5510252c0662a1e04dd0aa616b9525269f3d2ea810c23"
   },
   "map015": {
-    "url": "https://www.city.higashimurayama.tokyo.jp/tanoshimi/kanko/kankopamph/files/cocomite_JP.pdf",
-    "sha256": "f12c55f4de39949f1b5c887e31ed7d05d482f45d71a41e325b4e5019ad501079"
+    "url": "https://static.tama-ebooks.jp/actibook_data/AO2_2302_cocomite_low_JP/original.pdf",
+    "sha256": "c54ac8df0cc8c5cf2f346a1f49927200801694a2a26caf95223d34c31e135a57"
   },
   "map016": {
     "url": "https://www.kanagawa-kankou.or.jp/storage/pamphlet_pdf/20240203132600_jogashimamisakiodekake.pdf",
@@ -73,7 +73,7 @@
   },
   "map019": {
     "url": "https://partners-pamph.jnto.go.jp/simg/pamph/1461.pdf",
-    "sha256": "81a05a8848b615c9dc92b23ed9a4cae32ed6f4a567fff2bfdc5432e166e0f6df"
+    "sha256": "7cee31a8d13862c41422f0b7fb9d877a8b895f14ad929babe37327beba2db202"
   },
   "map020": {
     "url": "https://www.fujikyubus.co.jp/pdf/hikingbus/hikingbus.pdf",

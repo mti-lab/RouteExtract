@@ -1,5 +1,26 @@
 # RouteExtract
 
+**Turn scanned hiking and sightseeing maps into GPS routes you can follow.**
+
+[[Paper (arXiv)](https://arxiv.org/abs/2509.11674)] · GDUG Workshop at ICCV 2025
+
+![From a scanned map to a routable GPX track](assets/teaser.png)
+<sub>Maps: top, Hadano City, *Hiking Map, Course B* (ハイキングマップBコース,
+[source](https://www.city.hadano.kanagawa.jp/material/files/group/51/B.pdf)), © Hadano City;
+bottom, Taito City, *Shitaya Shichifukujin* (下谷七福神,
+[source](https://t-navi.city.taito.lg.jp/storage/pamphlet_pdf/20250321085114_shitaya_shichifukujin_2503.pdf)), © Taito City.
+Navigation app: Komoot, map data © OpenStreetMap contributors.</sub>
+
+Paper maps from tourist offices and municipalities often show trails that are hard to find in digital map apps.
+RouteExtract is a modular pipeline that extracts these trails and makes them routable:
+
+1. **Georeferencing**: align the scanned map with real-world coordinates using ground control points.
+2. **Trail segmentation**: a neural network extracts the trail from the map image.
+3. **Route generation**: the extracted trail is converted into a graph and matched to OpenStreetMap paths with
+   GraphHopper, producing a GPX track.
+
+We also release a **dataset of 50 annotated maps from Japan** with 86 hand-made trail masks and ground control points
+(see [Map Dataset](#map-dataset)).
 
 ## Setup
 
@@ -50,6 +71,14 @@ for georeferencing the maps.
 Note that we don't host the maps ourselves but only provide links to publicly accessible maps. Please let us know if any
 of the provided download links don't work anymore!
 
+`download_maps.py` verifies every file against a SHA-256 hash. If a download fails, simply run the script again: files
+that already exist and match their hash are skipped. Some publishers have since moved or re-released their maps, so a few
+sources differ from the versions used in the paper:
+- `map012`: the original pamphlet was replaced by a 2026 edition. The trails and the base map are unchanged and the masks
+  still align, but some illustrations around the trails differ, so results on this map will not exactly match the paper.
+- `map015`, `map019`: the files were re-published and have new hashes, but they render (nearly) identically to the
+  originals at the resolution we use.
+
 Here's how to download and prepare the dataset:
 ```shell
 cd dataset/ && \
@@ -69,3 +98,19 @@ To train the segmentation, run `src/train_trail_segmentation.py`. The model can 
 Routes can be generated using either `src/generate_gpx.py` or `src/batch_generate_gpx.py`.
 Similarly, evaluation can be done using `src/evaluate_gpx.py` or `src/batch_evaluate_gpx.py`.
 
+## Citation
+If you use RouteExtract or our dataset, please cite:
+```bibtex
+@misc{kremser2025routeextract,
+  title         = {RouteExtract: A Modular Pipeline for Extracting Routes from Paper Maps},
+  author        = {Kremser, Bjoern and Matsui, Yusuke},
+  year          = {2025},
+  eprint        = {2509.11674},
+  archivePrefix = {arXiv},
+  note          = {GDUG Workshop at ICCV 2025}
+}
+```
+
+## Map sources
+The maps are not part of this repository and remain the property of their publishers; `dataset/resources.json` lists
+the source of every map.

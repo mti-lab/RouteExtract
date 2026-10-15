@@ -40,7 +40,7 @@ def download_file(url, out_path):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
 
-    response = requests.get(url, headers=headers, stream=True)
+    response = requests.get(url, headers=headers, stream=True, timeout=60)
     response.raise_for_status()
     with open(out_path, 'wb') as f:
         for chunk in response.iter_content(chunk_size=8192):
@@ -53,8 +53,9 @@ def main(map_manifest_path, resource_manifest_path, output_dir):
 
     needed_ids = infer_resource_ids_from_maps(map_manifest_path)
     error_ids = []
+    failed_ids = []
 
-    for res_id in needed_ids:
+    for res_id in sorted(needed_ids):
         if res_id not in resources:
             print(f"[!] WARNING: No entry for resource '{res_id}' in resources.json")
             continue
@@ -73,7 +74,12 @@ def main(map_manifest_path, resource_manifest_path, output_dir):
                 print(f"[!] Hash mismatch for {res_id}, redownloading...")
 
         print(f"[↓] Downloading {res_id}.pdf...")
-        download_file(url, out_path)
+        try:
+            download_file(url, out_path)
+        except requests.RequestException as e:
+            print(f"[❌] ERROR: Could not download {res_id}.pdf from {url}: {e}")
+            failed_ids.append(res_id)
+            continue
 
         if expected_hash:
             actual_hash = compute_sha256(out_path)
@@ -85,8 +91,11 @@ def main(map_manifest_path, resource_manifest_path, output_dir):
             else:
                 print(f"[✓] Verified hash for {res_id}.pdf")
 
+    if len(failed_ids) > 0:
+        print(f"Warning: {len(failed_ids)} file{'s' if len(failed_ids) > 1 else ''} could not be downloaded! The download links might not work anymore, please let us know.")
+        print(f"Maps with failed downloads: {failed_ids}")
     if len(error_ids) > 0:
-        print(f"Warning: {len(error_ids)} file{"s" if len(error_ids) > 1 else ""} did not match with the expected hash values! The files provided in the download links might have been changed, so please check them manually.")
+        print(f"Warning: {len(error_ids)} file{'s' if len(error_ids) > 1 else ''} did not match with the expected hash values! The files provided in the download links might have been changed, so please check them manually.")
         print(f"Maps with errors: {error_ids}")
 
 if __name__ == "__main__":
