@@ -1,6 +1,7 @@
 import csv
 from pathlib import Path
 from evaluate_gpx import load_gpx_to_utm, load_mask_to_utm, chamfer_distance, CRS_TARGET, visualize_debug, mean_distance_A_from_B
+from dataset.download_maps import load_config_file
 from pyproj import Transformer
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,9 +13,11 @@ MASK_DIR = Path("../dataset/masks")  # Ground truth masks
 MANIFEST_PATH = Path("../dataset/maps_manifest.yaml")
 OUTPUT_CSV = Path("../outputs/evaluation_all_configs.csv")
 PIPELINE_CONFIG = "gpx_e2e_gp_ir_pred"
+SKIP_APPROXIMATE_GCPS = True  # Skip maps marked "gcp_quality: approximate" (not drawn to scale, GCPs only roughly fit)
 
 # Transformer
 transformer = Transformer.from_crs("EPSG:4326", CRS_TARGET, always_xy=True)
+manifest = load_config_file(MANIFEST_PATH, return_dict=True)
 
 def merge_results_to_csv(results, output_csv):
     data = {}  # key = mask_file, value = dict of fields
@@ -83,6 +86,10 @@ for gpx_dir in sorted(OUTPUT_ROOT.glob(PIPELINE_CONFIG)):
 
             if not mask_file.exists():
                 print(f"[SKIP] No GT mask for {gpx_file.name}")
+                continue
+
+            if SKIP_APPROXIMATE_GCPS and manifest[map_id].get("gcp_quality") == "approximate":
+                print(f"[SKIP] Approximate georeferencing for {gpx_file.name}")
                 continue
 
             gpx_pts = load_gpx_to_utm(gpx_file, transformer)

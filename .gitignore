@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+
+# Downloaded and generated dataset files (maps are not redistributed, see README)
+dataset/originals/
+dataset/images_raw/
+dataset/images_final/
+dataset/split.txt
+
+# Training and evaluation outputs
+checkpoints/
+logs/
+outputs/
+runs/
+
+# GraphHopper binaries, OSM data and graph caches
+GraphHopper/*.jar
+GraphHopper/*/

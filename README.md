@@ -88,6 +88,20 @@ python crop_and_resize.py && \
 cd ../
 ```
 
+#### Georeferencing and trail start/end points
+Since v1.1, every map in `dataset/maps_manifest.yaml` has Ground Control Points (`gcps`), and every trail has a start
+and end point (`start`, `end`, given as `[lat, lon]`), so any train/val/test split can be evaluated. In v1.0, these
+were only complete for the maps of the test split used in the paper. Two fields describe the GCPs of each map:
+- `gcp_source`: `manual` for the 21 maps georeferenced by hand for the paper, `semi_automatic` for the 29 maps
+  added in v1.1. For those, tie points between named map features and OpenStreetMap were refined against OSM
+  geometry (water bodies, coastlines or street networks) or, for illustrated maps, fitted directly.
+- `gcp_quality: approximate`: set for maps that are not drawn to scale (`map018`, `map027a`, `map027b`, `map030a`),
+  where an affine transform only roughly fits the drawing (errors of about 50–150 m). `src/batch_evaluate_gpx.py`
+  skips these maps by default (`SKIP_APPROXIMATE_GCPS`).
+
+The GCPs of `map003b` were replaced in v1.1 by a better-spread set (11 instead of 3 points). This map is part of the
+training split in the paper, so the reported results are not affected.
+
 ## How to run
 ### Trail Segmentation
 Before training the segmentation model, you first need to run `src/trail_dataset.py` once to generate the `split.txt` file
